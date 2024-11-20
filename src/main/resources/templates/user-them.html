@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout :: head}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container-scroller">
+    <nav>
+        <header th:replace="layout :: header">
+            <!-- Header content -->
+        </header>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                    <div class="img-ss rounded-circle bg-light border mr-3"></div>
+                    Light
+                </div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                    <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+                    Dark
+                </div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <aside th:replace="~{layout :: aside}">
+
+        </aside>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Thêm user</h4>
+                                <form th:action="@{/user/add}" th:object="${usersDTO}" method="POST" enctype="multipart/form-data">
+                                    <!-- Full Name -->
+                                    <div class="form-group">
+                                        <label for="HoTen">Full Name</label>
+                                        <input type="text" class="form-control" id="HoTen" name="HoTen" th:field="*{hoTen}" placeholder="Enter full name" required />
+                                    </div>
+
+                                    <!-- Phone Number -->
+                                    <div class="form-group">
+                                        <label for="SDT">Phone Number</label>
+                                        <input type="number" class="form-control" id="SDT" name="SDT" th:field="*{SDT}" placeholder="Enter phone number" required />
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="Email">Email</label>
+                                        <input type="email" class="form-control" id="Email" name="Email" th:field="*{email}" placeholder="Enter email" required />
+                                    </div>
+
+                                    <!-- Account -->
+                                    <div class="form-group">
+                                        <label for="TaiKhoan">Account Name</label>
+                                        <input type="text" class="form-control" id="TaiKhoan" name="TaiKhoan" th:field="*{taiKhoan}" placeholder="Enter account name" required />
+                                    </div>
+
+                                    <!-- Bank Account Number -->
+                                    <div class="form-group">
+                                        <label for="SoTaiKhoan">Bank Account Number</label>
+                                        <input type="text" th:field="*{soTaiKhoan}" class="form-control" id="SoTaiKhoan" placeholder="Enter bank account number"  required>
+
+                                    </div>
+
+                                    <!-- Vehicle -->
+
+                                    <!-- Bank -->
+                                    <div class="form-group">
+                                        <label for="NganHangId">Bank</label>
+                                        <select class="form-control" id="NganHangId" name="NganHangId" th:field="*{tenNganHang}" required >
+                                            <option value="" disabled selected>Select Bank</option>
+                                            <option value="Agribank">Agribank</option>
+                                            <option value="Techcombank">Techcombank</option>
+                                            <option value="MB Bank">MB Bank</option>
+                                            <option value="Vietcombank">Vietcombank</option>
+                                            <option value="Sacombank">Sacombank</option>
+                                            <option value="Cake">Cake</option>
+                                            <!-- Thêm các tùy chọn ngân hàng khác nếu cần -->
+                                        </select>
+                                    </div>
+
+                                    <!-- Role -->
+                                    <div class="form-group">
+                                        <label for="Role_Id">Role</label>
+                                        <select class="form-control" id="Role_Id" name="Role_Id" th:field="*{role_Id}">
+                                            <option value="" disabled selected>Select Role</option>
+                                            <option th:each="role : ${roleList}" th:value="${role.Id}" th:text="${role.roleName}"></option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Image (Optional) -->
+                                    <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Dường dẫn</label>
+                                        <div class="form-row">
+                                            <div class="col-md-8">
+                                                <div class="card">
+                                                    <!-- Displaying the employee photo, clicking on it triggers the file input -->
+                                                    <label for="uploadPhoto">
+                                                        <img id="photoPreview" class="card-img-top" alt="Employee Photo" style="cursor: pointer; ">
+                                                    </label>
+                                                    <div class="card-body">
+
+                                                        <p id="photoPath" class="card-text text-muted"></p>
+
+                                                    </div>
+                                                </div>
+                                                <!-- Hidden file input that triggers the photo upload -->
+                                                <input type="file" id="uploadPhoto"  name="photo" style="display: none;" accept="image/*" onchange="previewImage(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Password -->
+                                    <div class="form-group">
+                                        <label for="Password">Password</label>
+                                        <input type="password" class="form-control" id="Password" name="Password" th:field="*{password}" placeholder="Enter password" required />
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Add User</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="~{layout :: footer}">
+            </footer>
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script th:src="@{/js/off-canvas.js}"></script>
+<script th:src="@{/js/hoverable-collapse.js}"></script>
+<script th:src="@{/js/template.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/todolist.js}"></script>
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('photoPreview');
+            output.src = reader.result;
+            var pathOutput=document.getElementById('photoPath');
+            pathOutput.textContent=event.target.files[0].name;
+        };
+        if (event.target.files && event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+</script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script th:src="@{/js/dashboard.js}"></script>
+<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+</body>
+</html>

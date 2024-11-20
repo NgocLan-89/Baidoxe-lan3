@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layoutkh :: headKH">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container-scroller">
+    <nav>
+        <header th:replace="layoutkh :: headerKH">
+            <!-- Header content -->
+        </header>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                    <div class="img-ss rounded-circle bg-light border mr-3"></div>
+                    Light
+                </div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                    <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+                    Dark
+                </div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <aside th:replace="layoutkh :: asideKH"></aside>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Danh sách phương tiện của bạn</h4>
+                                <div class="row align-items-center">
+                                    <div class="col-lg-12 col-md-6 d-flex align-items-center">
+                                        <a class="btn btn-primary btn-round ms-auto" th:href="@{/KH/phuongtien/them}" style="margin-left: auto;">
+                                            <i class="fa fa-plus"></i> Thêm
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Loại Phương Tiện</th>
+                                            <th>Hãng</th>
+                                            <th>Biển Số</th>
+                                            <th>Trạng Thái</th>
+                                            <th>Thao Tác</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="phuongTien : ${phuongTienList}">
+                                            <td th:text="${phuongTien.id}"></td>
+                                            <td th:text="${phuongTien.loaiPhuongTien}"></td>
+                                            <td th:text="${phuongTien.hang}"></td>
+                                            <td th:text="${phuongTien.bienSo}"></td>
+                                            <td>
+                                                <span th:if="${phuongTien.status == 1}">Đang hoạt động</span>
+                                                <span th:unless="${phuongTien.status == 1}">Không hoạt động</span>
+                                            </td>
+                                            <td>
+                                                <div class="form-button-action">
+                                                    <a class="btn btn-sm btn-primary" th:href="@{/KH/phuongtien/sua/{id}(id=${phuongTien.id})}">Sửa</a>
+                                                    <a class="btn btn-sm btn-danger" th:href="@{/KH/phuongtien/xoa/{id}/{userId}(id=${phuongTien.id}, userId=${phuongTien.userId})}">Xóa</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="layoutkh :: footerKH">
+            </footer>
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script th:src="@{/js/off-canvas.js}"></script>
+<script th:src="@{/js/hoverable-collapse.js}"></script>
+<script th:src="@{/js/template.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/todolist.js}"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script th:src="@{/js/dashboard.js}"></script>
+<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+</body>
+</html>

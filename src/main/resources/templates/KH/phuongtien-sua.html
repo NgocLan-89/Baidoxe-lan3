@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layoutkh :: headKH">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container-scroller">
+    <nav>
+        <header th:replace="layoutkh :: headerKH">
+            <!-- Header content -->
+        </header>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                    <div class="img-ss rounded-circle bg-light border mr-3"></div>
+                    Light
+                </div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                    <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+                    Dark
+                </div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <aside th:replace="layoutkh :: asideKH"></aside>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Sửa thông tin phương tiện</h4>
+                                <form th:action="@{/KH/phuongtien/sua}" method="post">
+                                    <input type="hidden" th:value="${phuongTienDTO.userId}" name="userId"/>
+                                    <input type="hidden" th:value="${phuongTienDTO.id}" name="id"/>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Loại phương tiện</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control" type="text" id="loaiPhuongTien" name="loaiPhuongTien"
+                                                           th:value="${phuongTienDTO.loaiPhuongTien}" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Hãng</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control" type="text" id="hang" name="hang"
+                                                           th:value="${phuongTienDTO.hang}" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Biển số</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control" type="text" id="bienSo" name="bienSo"
+                                                           th:value="${phuongTienDTO.bienSo}" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label" for="status">Trạng thái</label>
+                                                <div class="col-sm-9">
+                                                    <select id="status" class="form-control" name="status">
+                                                        <option value="1" th:selected="${phuongTienDTO.status == 1}">
+                                                            Đang sử dụng
+                                                        </option>
+                                                        <option value="0" th:selected="${phuongTienDTO.status == 0}">
+                                                            Không sử dụng
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button type="submit" class="btn btn-primary mr-2 fa fa-check"> Lưu</button>
+                                            <a th:href="@{/KH/phuongtien/{userId}(userId=${phuongTienDTO.userId})}"
+                                               class="btn btn-light fa fa-arrow-left"> Quay lại</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="layoutkh :: footerKH">
+            </footer>
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script th:src="@{/js/off-canvas.js}"></script>
+<script th:src="@{/js/hoverable-collapse.js}"></script>
+<script th:src="@{/js/template.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/todolist.js}"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script th:src="@{/js/dashboard.js}"></script>
+<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+</body>
+</html>

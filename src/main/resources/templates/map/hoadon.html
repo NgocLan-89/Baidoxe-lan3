@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layoutkh :: headKH">
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<style>
+  .tt{
+    display: block;
+    margin-bottom: 20px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color:white;
+  }
+  .row {
+    display: -ms-flexbox; /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap; /* IE10 */
+    flex-wrap: wrap;
+    margin: 0 -16px;
+  }
+
+  .col-25 {
+    -ms-flex: 25%; /* IE10 */
+    flex: 25%;
+  }
+
+  .col-50 {
+    -ms-flex: 50%; /* IE10 */
+    flex: 50%;
+  }
+
+  .col-75 {
+    -ms-flex: 75%; /* IE10 */
+    flex: 75%;
+  }
+
+  .col-25,
+  .col-50,
+  .col-75 {
+    padding: 0 16px;
+  }
+
+  .container {
+    background-color: #f2f2f2;
+    padding: 5px 20px 15px 20px;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+  }
+
+
+
+  label {
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .icon-container {
+    margin-bottom: 20px;
+    padding: 7px 0;
+    font-size: 24px;
+  }
+
+  .btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    width: 100%;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 17px;
+  }
+
+  .btn:hover {
+    background-color: #45a049;
+  }
+
+  a {
+    color: #2196F3;
+  }
+
+  hr {
+    border: 1px solid lightgrey;
+  }
+
+  span.price {
+    float: right;
+    color: grey;
+  }
+
+  .card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    padding:50px;
+    margin:10px;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+  /* Container for the horizontal scroll */
+  .scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    cursor: grab;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Items in the scrollable list */
+  .item {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 100px;
+    margin-right: 15px;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    font-size: 18px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+
+  /* Hover effect for the items */
+  .item:hover {
+    transform: scale(1.05);
+  }
+
+  /* Styling for the map */
+  #map {
+    height: 400px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 8px;
+  }
+</style>
+<body>
+<div class="container-scroller">
+  <nav>
+    <header th:replace="layoutkh :: headerKH">
+      <!-- Header content -->
+    </header>
+  </nav>
+  <div class="container-fluid page-body-wrapper">
+    <div class="theme-setting-wrapper">
+      <div id="settings-trigger"><i class="ti-settings"></i></div>
+      <div id="theme-settings" class="settings-panel">
+        <i class="settings-close ti-close"></i>
+        <p class="settings-heading">SIDEBAR SKINS</p>
+        <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+          <div class="img-ss rounded-circle bg-light border mr-3"></div>
+          Light
+        </div>
+        <div class="sidebar-bg-options" id="sidebar-dark-theme">
+          <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+          Dark
+        </div>
+        <p class="settings-heading mt-2">HEADER SKINS</p>
+        <div class="color-tiles mx-0 px-4">
+          <div class="tiles success"></div>
+          <div class="tiles warning"></div>
+          <div class="tiles danger"></div>
+          <div class="tiles info"></div>
+          <div class="tiles dark"></div>
+          <div class="tiles default"></div>
+        </div>
+      </div>
+    </div>
+    <aside th:replace="layoutkh :: asideKH">
+    </aside>
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <h3>Chi tiết hóa đơn đặt chỗ</h3>
+        <div class="row">
+          <div class="col-lg-6 grid-margin stretch-card" th:each="item : ${thongTinDo}" >
+
+            <div class="card">
+              <div class="container">
+                <div class="row">
+                  <div class="col-50">
+                    <h3 style="margin-top: 10px;">Thông tin đặt chỗ </h3>
+                    <label ><i class="fa fa-user"></i> Họ tên</label>
+                    <span class="tt" type="text" id="fname" name="firstname" th:text="${item.hoTen}" readonly></span>
+                    <label ><i class="fa fa-envelope"></i> Email</label>
+                    <span class="tt" type="text" id="email" name="email" th:text="${item.email}" readonly></span>
+                    <label ><i class="fa fa-address-card-o"></i> Bãi đỗ </label>
+                    <span class="tt" type="text" id="adr" name="address" th:text="${item.tenBaiDo}" readonly></span>
+                    <label ><i class="fa fa-institution"></i> Vị trí đỗ </label>
+                    <span class="tt" type="text" id="city" name="city" th:text="${item.chiTietViTri}" readonly></span>
+
+                    <div class="row">
+                      <div class="col-50">
+                        <label>Giờ vào</label>
+                        <span class="tt" type="text" th:text="${#temporals.format(item.thoiGianVao, ' HH:mm')}" readonly></span>
+                      </div>
+                      <div class="col-50">
+                        <label>Giờ ra</label>
+                        <span class="tt" type="text" th:text="${#temporals.format(item.thoiGianRa, 'HH:mm')}" readonly></span>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="col-50">
+                    <h3 style="margin-top: 10px;" >Thanh toán</h3>
+                    <label for="fname">Ngân hàng</label>
+                    <div class="icon-container">
+                      <i class="fa fa-cc-visa" style="color:navy;"></i>
+                      <i class="fa fa-cc-amex" style="color:blue;"></i>
+                      <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                      <i class="fa fa-cc-discover" style="color:orange;"></i>
+                    </div>
+                    <label for="cname">Tên ngân hàng</label>
+                    <span class="tt" type="text" id="cname" name="cardname" th:text="${item.tenNganHang}" readonly></span>
+                    <label for="ccnum">Số thẻ</label>
+                    <span class="tt" type="text" id="ccnum" name="cardnumber" th:text="${item.soTaiKoan}" readonly></span>
+                    <label for="expmonth">Biển số xe </label>
+                    <span class="tt" type="text" id="expmonth" name="expmonth" th:text="${item.bienSo}" readonly></span>
+                    <label for="expyear">Ngày tháng</label>
+                    <span class="tt" type="text" id="expyear" name="expyear" th:text="${#temporals.format(item.thoiGianRa, 'dd-MM-yyyy')}" readonly></span>
+                    <div class="qr">
+                      <h4 style="margin-top: 10px;" >Mã QR của bạn</h4>
+                      <img th:src="${qrCodeUrl}" alt="QR Code" />
+                      <p>Hãy sử dụng mã QR này để quét tại bãi đỗ.</p></div>
+
+
+
+                  </div>
+
+                </div>
+
+                <!--                <input type="submit" value="Continue to checkout" class="btn">-->
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  <footer th:replace="layout :: footer">
+  </footer>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>

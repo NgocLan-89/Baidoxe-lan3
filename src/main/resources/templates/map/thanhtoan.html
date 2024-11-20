@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en" xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+        <head th:replace="layout :: head">
+        <meta charset="UTF-8">
+        <title>Title</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<style>
+    .qr {
+        text-align: center;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 300px;
+    }
+
+    .qr img {
+        width: 150px;
+        height: auto;
+        margin: 10px 0;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .qr h4 {
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .qr p {
+        margin-top: 10px;
+        font-size: 13px;
+        color: #666;
+    }
+
+    .tt{
+        display: block;
+        margin-bottom: 20px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background-color:white;
+    }
+    .row {
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        -ms-flex-wrap: wrap; /* IE10 */
+        flex-wrap: wrap;
+        margin: 0 -16px;
+    }
+
+    .col-25 {
+        -ms-flex: 25%; /* IE10 */
+        flex: 25%;
+    }
+
+    .col-50 {
+        -ms-flex: 50%; /* IE10 */
+        flex: 50%;
+    }
+
+    .col-75 {
+        -ms-flex: 75%; /* IE10 */
+        flex: 75%;
+    }
+
+    .col-25,
+    .col-50,
+    .col-75 {
+        padding: 0 16px;
+    }
+
+    .container {
+        background-color: #f2f2f2;
+        padding: 5px 20px 15px 20px;
+        border: 1px solid lightgrey;
+        border-radius: 3px;
+    }
+
+
+
+    label {
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .icon-container {
+        margin-bottom: 20px;
+        padding: 7px 0;
+        font-size: 24px;
+    }
+
+    .btn {
+        background-color: #418adc;
+        color: white;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        width: 100%;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 17px;
+    }
+
+    .btn:hover {
+        background-color: #0f109a;
+        color:white;
+    }
+
+    a {
+        color: #2196F3;
+    }
+
+    hr {
+        border: 1px solid lightgrey;
+    }
+
+    span.price {
+        float: right;
+        color: grey;
+    }
+
+    .card {
+        /* Add shadows to create the "card" effect */
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        padding:50px;
+        margin:10px;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    /* Container for the horizontal scroll */
+    .scroll-container {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        cursor: grab;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Items in the scrollable list */
+    .item {
+        flex: 0 0 auto;
+        width: 150px;
+        height: 100px;
+        margin-right: 15px;
+        background-color: #007bff;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+        font-size: 18px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+    /* Hover effect for the items */
+    .item:hover {
+        transform: scale(1.05);
+    }
+
+    /* Styling for the map */
+    #map {
+        height: 400px;
+        width: 100%;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+</style>
+<body>
+<div class="container-scroller">
+    <nav>
+        <header th:replace="layoutkh :: headerKH">
+            <!-- Header content -->
+        </header>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                    <div class="img-ss rounded-circle bg-light border mr-3"></div>
+                    Light
+                </div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                    <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+                    Dark
+                </div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <aside th:replace="layoutkh :: asideKH">
+        </aside>
+        <div class="main-panel">
+            <div class="content-wrapper">
+
+                <form id="timeForm"  method="post">
+                    <div class="row">
+
+                        <div class="col-lg-6 grid-margin stretch-card" th:each="item : ${thanhtoandt}" >
+
+                            <div class="card">
+                                <div class="container">
+                                    <div class="">
+                                        <div class="col-100">
+                                            <h3 style="margin-top: 10px;">Thông tin đặt chỗ </h3>
+                                            <div class="row">
+                                                <div class="col-50">
+                                                    <label>Phương tiện</label>
+                                                    <span class="tt" type="text" id="fname" name="firstname" th:text="${item.loaiPhuongTien}" readonly></span>
+                                                </div>
+                                                <div class="col-50">
+                                                    <label>Biển số</label>
+                                                    <span class="tt" type="text" id="email" name="email" th:text="${item.bienSo}" readonly></span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-50">
+                                                    <label ><i class="fa fa-address-card-o"></i> Bãi đỗ </label>
+                                                    <span class="tt" type="text" id="adr" name="address" th:text="${item.tenBaiDo}" readonly></span>
+                                                </div>
+                                                <div class="col-50">
+                                                    <label>Vị trí đỗ</label>
+                                                    <span class="tt" type="text" id="vitri" name="email" th:text="${item.chiTietViTri}" readonly></span>
+                                                </div>
+
+                                            </div>
+
+
+                                            <label ><i class="fa fa-institution"></i> Địa chỉ bãi đỗ </label>
+                                            <span class="tt" type="text" id="city" name="city" th:text="${item.diaChi}" readonly></span>
+                                            <label ><i class="fa fa-institution"></i> Ngày tháng </label>
+                                            <span class="tt" type="text" id="expyear" name="expyear" th:text="${#temporals.format(item.dangKyGioRa, 'dd-MM-yyyy')}" readonly></span>
+
+
+                                            <div class="row">
+                                                <div class="col-50">
+                                                    <label>Giờ vào</label>
+                                                    <span id="gioVao" class="tt" type="text" th:text="${#temporals.format(item.dangKyGioVao, ' HH:mm')}" readonly></span>
+                                                </div>
+                                                <div class="col-50">
+                                                    <label>Giờ ra</label>
+                                                    <span id="gioRa" class="tt" type="text" th:text="${#temporals.format(item.dangKyGioRa, 'HH:mm')}" readonly></span>
+                                                </div>
+                                                <input style="display:none;" name="DangKyGioVao" th:value="${#temporals.format(item.dangKyGioVao, 'yyyy-MM-dd HH:mm:ss.SSS')}" />
+                                                <input style="display:none;" name="DangKyGioRa" th:value="${#temporals.format(item.dangKyGioRa, 'yyyy-MM-dd HH:mm:ss.SSS')}" />
+                                                <input  style="display:none;" type="text" name="DatCho_Id" th:value="${datChoDTO.id}" />
+
+
+                                            </div>
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <!--                <input type="submit" value="Continue to checkout" class="btn">-->
+                                </div>
+                            </div>
+                            <script>
+                                function calculateTimeDifference() {
+                                    // Lấy giá trị thời gian từ span bằng ID
+                                    const timeIn = document.getElementById("gioVao").textContent.trim();
+                                    const timeOut = document.getElementById("gioRa").textContent.trim();
+
+                                    // Chuyển đổi sang định dạng Date
+                                    const timeInDate = new Date(`1970-01-01T${timeIn}:00`);
+                                    const timeOutDate = new Date(`1970-01-01T${timeOut}:00`);
+
+                                    // Tính thời gian chênh lệch (phút)
+                                    const timeDifference = (timeOutDate - timeInDate) / (1000 * 60); // Chuyển từ ms sang phút
+
+                                    // Tính tổng tiền (1 phút = 300 đồng)
+                                    const costPerMinute = 300;
+                                    const totalCost = timeDifference * costPerMinute;
+
+                                    // Hiển thị kết quả lên giao diện
+                                    const timeParkElement = document.getElementById("timepark");
+                                    const totalCostElement = document.getElementById("totalCost");
+                                    if (timeParkElement && totalCostElement) {
+                                        timeParkElement.textContent = `${timeDifference} phút`; // Hiển thị thời gian đỗ
+                                        totalCostElement.textContent = `${totalCost.toLocaleString()} đồng`; // Hiển thị tổng tiền
+                                    }
+                                }
+
+                                // Gọi hàm sau khi tài liệu đã được tải
+                                window.onload = calculateTimeDifference;
+                            </script>
+
+                            <div class="card">
+                                <div class="container">
+                                    <div class="">
+                                        <div class="col-100">
+
+
+                                            <h3 style="margin-top: 10px;" >Thanh toán</h3>
+                                            <div class="row">
+                                                <div class="col-50">
+                                                    <label for="stk">Tên ngân hàng </label>
+                                                    <span class="tt" type="text" id="nganhang" name="expmonth" th:text="${item.tenNganHang}" readonly></span>
+
+                                                </div>
+                                                <div class="col-50">
+                                                    <label for="stk">Số thẻ</label>
+                                                    <span class="tt" type="text" id="stk" name="cardnumber" th:text="${item.soTaiKhoan}" readonly></span>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-50">
+                                                    <label for="stk"> Thời gian đỗ </label>
+                                                    <span class="tt" id="timepark"></span>
+                                                </div>
+                                                <div class="col-50">
+                                                    <label for="stk">Tổng tiền</label>
+                                                    <span class="tt" id="totalCost"></span>
+
+                                                </div>
+                                                <div class="qr">
+                                                    <h4 style="margin-top: 10px;" >Mã QR của bạn</h4>
+                                                    <img th:src="${qrCodeUrl}" alt="QR Code" />
+                                                    <p>Hãy sử dụng mã QR này để quét tại bãi đỗ.</p></div>
+
+                                            </div>
+
+
+
+
+                                        </div>
+
+
+
+
+
+
+
+
+                                    </div>
+
+                                    <input type="submit" value="Đồng ý thanh toán và tiếp tục" class="btn">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <footer th:replace="layoutkh :: footerKH">
+    </footer>
+</div>
+</div>
+</div>
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layoutkh :: headKH}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .selected {
+        background-color: #007bff;
+        color: white;
+    }
+</style>
+
+<body>
+<div class="container-scroller">
+    <nav>
+        <header th:replace="layoutkh :: headerKH">
+            <!-- Header content -->
+        </header>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                    <div class="img-ss rounded-circle bg-light border mr-3"></div>
+                    Light
+                </div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                    <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+                    Dark
+                </div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <aside th:replace="layoutkh :: asideKH">
+
+        </aside>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="${baiDo.TenBaiDo}">Bãi đỗ ABCD</h4>
+                                <div class="container">
+                                    <div class="row align-items-center">
+                                        <div class="col-4 text-center">
+                                            <p class="mb-3">Còn trống</p>
+                                            <h4 class="text-success" th:text="${soLuongConTrong} + '/15'">15/15</h4>
+                                        </div>
+                                        <div class="col-4 text-center">
+                                            <p class="mb-3">Giờ mở cửa</p>
+                                            <h4 class="text-primary">06:00 - 22:00</h4>
+                                        </div>
+                                        <div class="col-4 text-center">
+                                            <p class="mb-0">Chỉ đường</p>
+                                            <p>Vĩ độ: <span th:text="${baiDo.ViDo != null ? baiDo.ViDo : 'Không xác định'}"></span></p>
+                                            <p>Kinh độ: <span th:text="${baiDo.KinhDo != null ? baiDo.KinhDo : 'Không xác định'}"></span></p>
+
+                                            <div th:if="${baiDo.ViDo != null and baiDo.KinhDo != null}">
+                                                <!-- Hiển thị liên kết chỉ đường nếu tọa độ hợp lệ -->
+                                                <button th:onclick="'getDirections(' + ${baiDo.viDo} + ', ' + ${baiDo.kinhDo} + ')'" class="btn btn-link">
+                                                    <i class="bi bi-geo-alt-fill fs-3"></i>
+                                                </button>
+                                                <span th:if="${baiDo.viDo} == null or ${baiDo.kinhDo} == null">Vị trí không hợp lệ</span>
+                                            </div>
+                                            <div th:if="${baiDo.ViDo == null or baiDo.KinhDo == null}">
+                                                <!-- Hiển thị thông báo nếu vị trí không hợp lệ -->
+                                                <span>Vị trí không hợp lệ</span>
+                                            </div>
+
+                                            <!--                                            <div class="col-4 text-center">-->
+                                            <!--                                                <p class="mb-0">Chỉ đường</p>-->
+                                            <!--                                                <p>Vĩ độ: <span th:text="${baiDo.ViDo}"></span></p>-->
+                                            <!--                                                <p>Kinh độ: <span th:text="${baiDo.KinhDo}"></span></p>-->
+                                            <!--                                                <a th:href="'https://www.google.com/maps?q=' + ${baiDo.KinhDo} + ',' + ${baiDo.ViDo}" target="_blank" class="btn btn-link">-->
+                                            <!--                                                    <i class="bi bi-geo-alt-fill fs-3"></i>-->
+                                            <!--                                                </a>-->
+
+
+                                            <!--                                                <span th:if="${baiDo.ViDo} == null or ${baiDo.KinhDo} == null">Vị trí không hợp lệ</span>-->
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+                                <form id="timeForm" th:action="@{/map/datcho/{Id}(Id=${baiDo.id})}" method="post">
+                                    <div class="container">
+                                        <h4 class="text-primary">Chọn biển số xe</h4><br>
+                                        <div class="row">
+                                            <div class="col-4" th:each="phuongTien : ${bienSo}">
+                                                <div class="card border-primary mb-3">
+                                                    <button type="button" class="btn btn-outline-primary card-body text-center"
+                                                            th:text="${phuongTien.bienSo}"
+                                                            th:data-id="${phuongTien.Id}"
+                                                            onclick="selectBienSo(this)">
+                                                        <!-- Hiển thị biển số xe tại đây -->
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Các trường ẩn để lưu thông tin biển số xe và Id -->
+                                            <input type="hidden" id="selectedVehicleId" name="selectedVehicleId">
+                                            <input type="hidden" id="selectedBienSo" name="bienSo">
+                                            <!-- Trường ẩn để lưu giờ vào và giờ ra -->
+                                            <input type="hidden" id="DangKyGioVao" name="DangKyGioVao">
+                                            <input type="hidden" id="DangKyGioRa" name="DangKyGioRa">
+
+                                            <!-- Thời gian chọn -->
+                                            <div class="container mt-2">
+                                                <h4 class="text-primary">Chọn thời gian</h4><br>
+                                                <div class="time-selector d-flex justify-content-between align-items-center p-2 border rounded">
+                                                    <button id="decreaseButton" class="btn btn-light btn-sm font-weight-bold">-</button>
+                                                    <div class="text-center">
+                                                        <div id="dateDisplay" class="text-muted small"></div>
+                                                        <br>
+                                                        <div id="timeDisplay" class="time-display"></div>
+                                                    </div>
+                                                    <button id="increaseButton" class="btn btn-light btn-sm font-weight-bold">+</button>
+                                                </div>
+                                            </div>
+
+                                            <br><br>
+                                            <div class="container">
+                                                <h4 class="text-primary">Chọn vị trí đỗ</h4><br>
+                                                <!-- Chọn vị trí đỗ -->
+                                                <div class="form-group">
+                                                    <select class="form-control" id="IdViTriDo" name="IdViTriDo"  required>
+                                                        <option value="" disabled selected>Chọn vị trí đỗ</option>
+                                                        <!-- Lặp qua danh sách ViTriDo và tạo option cho mỗi vị trí -->
+                                                        <option th:each="ViTriDo : ${ListViTriDo}"
+                                                                th:value="${ViTriDo.Id}"
+                                                                th:text="${ViTriDo.ChiTietViTri}"></option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="container">
+                                                <div class="row justify-content-center">
+                                                    <!-- Form để gửi dữ liệu sang Controller -->
+                                                    <input type="hidden" id="selectedHour" name="selectedHour">
+                                                    <input type="hidden" id="selectedDate" name="selectedDate">
+                                                    <div class="col-12 col-md-auto">
+                                                        <button type="submit" class="btn btn-primary">Đặt chỗ</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="layoutkh :: footerKH">
+            </footer>
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script th:src="@{/js/off-canvas.js}"></script>
+<script th:src="@{/js/hoverable-collapse.js}"></script>
+<script th:src="@{/js/template.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/todolist.js}"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script th:src="@{/js/dashboard.js}"></script>
+<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+<script>
+    function getDirections(destinationLat, destinationLng) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destinationLat},${destinationLng}&travelmode=driving`;
+                    window.open(googleMapsUrl, '_blank');
+                },
+                () => {
+                    alert("Không thể lấy vị trí hiện tại của bạn.");
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            alert("Trình duyệt của bạn không hỗ trợ định vị.");
+        }
+    }
+</script>
+<!--<script>-->
+<!--    // Chọn biển số và lưu vào input hidden-->
+<!--    function selectBienSo(button) {-->
+<!--        var bienSo = button.innerText; // Lấy biển số từ nút-->
+<!--        document.getElementById("bienSoInput").value = bienSo; // Lưu biển số vào input hidden-->
+<!--    }-->
+<!--</script>-->
+<script>
+    // Hàm xử lý khi người dùng nhấn vào nút biển số
+    function selectBienSo(button) {
+        // Xóa lớp 'selected' khỏi tất cả các nút button
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(function(btn) {
+            btn.classList.remove('selected'); // Loại bỏ lớp selected
+        });
+
+        // Thêm lớp 'selected' cho nút button đã chọn
+        button.classList.add('selected');
+
+        // Lưu thông tin biển số xe và ID vào các trường ẩn
+        const vehicleId = button.getAttribute('data-id');
+        const bienSo = button.textContent.trim();
+
+        document.getElementById('selectedVehicleId').value = vehicleId;
+        document.getElementById('selectedBienSo').value = bienSo;
+    }
+</script>
+
+
+<script>
+    // Biến lưu thời gian hiện tại
+    let selectedDateTime = new Date();
+
+    // Gán sự kiện cho nút tăng và giảm
+    document.getElementById("increaseButton").addEventListener("click", () => {
+        updateDateTime(1); // Tăng 1 giờ
+    });
+
+    document.getElementById("decreaseButton").addEventListener("click", () => {
+        updateDateTime(-1); // Giảm 1 giờ
+    });
+
+    // Hàm cập nhật thời gian và hiển thị
+    function updateDateTime(hoursToAdd) {
+        // Cập nhật thời gian được chọn
+        selectedDateTime.setHours(selectedDateTime.getHours() + hoursToAdd);
+
+        // Cập nhật giao diện hiển thị
+        document.getElementById("dateDisplay").innerText = formatDate(selectedDateTime);
+        document.getElementById("timeDisplay").innerText = formatTime(selectedDateTime);
+
+        // Lưu giờ vào và giờ ra vào các trường ẩn
+        document.getElementById("DangKyGioVao").value = formatFullDateTime(selectedDateTime);
+        const gioRa = new Date(selectedDateTime);
+        gioRa.setHours(gioRa.getHours() + 1); // Giả định giờ ra là 1 giờ sau giờ vào
+        document.getElementById("DangKyGioRa").value = formatFullDateTime(gioRa);
+    }
+
+    // Hàm định dạng ngày: yyyy-MM-dd
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Hàm định dạng giờ: HH:mm:ss.SSS
+    function formatTime(date) {
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        const milliseconds = date.getMilliseconds().toString().padStart(3, '0');
+        return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+    }
+
+    // Hàm định dạng đầy đủ: yyyy-MM-dd HH:mm:ss.SSS
+    function formatFullDateTime(date) {
+        return `${formatDate(date)} ${formatTime(date)}`;
+    }
+
+    // Hiển thị ban đầu
+    updateDateTime(0);
+
+</script>
+</body>
+</html>

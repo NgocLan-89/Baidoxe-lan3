@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container-scroller">
+    <nav>
+        <header th:replace="layout :: header">
+            <!-- Header content -->
+        </header>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                    <div class="img-ss rounded-circle bg-light border mr-3"></div>
+                    Light
+                </div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                    <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+                    Dark
+                </div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <aside th:replace="layout :: aside">
+
+        </aside>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Sửa user</h4>
+                                <form class="form-sample" th:action="@{/user/sua/{Id}(Id=${usersDTO.Id})}" th:object="${usersDTO}" method="POST" enctype="multipart/form-data">
+                                    <p class="card-description">Thông tin User</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label" for="HoTen">Họ tên</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" id="HoTen" name="HoTen" th:field="*{hoTen}" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label" for="SDT">Số điện thoại</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control" id="SDT" name="SDT" th:field="*{SDT}" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label" for="SoTaiKhoan">Bank Account Number</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" th:field="*{soTaiKhoan}"  id="SoTaiKhoan" placeholder="Enter bank account number"  required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label" for="Password">Password</label>
+                                                <div class="col-sm-9">
+                                                    <input type="password" class="form-control" id="Password" name="Password" th:field="*{password}" placeholder="Enter password" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label" for="Email">Email</label>
+                                                <div class="col-sm-9">
+                                                    <input type="email" class="form-control" id="Email" name="Email" th:field="*{email}" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label" for="TaiKhoan">Tài khoản</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" id="TaiKhoan" name="TaiKhoan" th:field="*{taiKhoan}" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label" for="NganHangId">Bank</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="NganHangId" name="NganHangId" th:field="*{tenNganHang}" required >
+                                                        <option value="" disabled selected>Select Bank</option>
+                                                        <option value="Agribank">Agribank</option>
+                                                        <option value="Techcombank">Techcombank</option>
+                                                        <option value="MB Bank">MB Bank</option>
+                                                        <option value="Vietcombank">Vietcombank</option>
+                                                        <option value="Sacombank">Sacombank</option>
+                                                        <option value="Cake">Cake</option>
+                                                        <!-- Thêm các tùy chọn ngân hàng khác nếu cần -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <label for="uploadPhoto">
+                                                    <img id="photoPreview" class="card-img-top" th:src="@{${usersDTO.image}}" alt="User Photo" style="cursor: pointer;">
+                                                </label>
+                                                <div class="card-body">
+                                                    <p id="photoPath" class="card-text text-muted"></p>
+                                                </div>
+                                            </div>
+                                            <input type="file" id="uploadPhoto" name="photo" style="display: none;" accept="image/*" onchange="previewImage(event)">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                            <a th:href="@{/user/list}" class="btn btn-light">Quay lại</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="layout :: footer">
+            </footer>
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+<script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+<script th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+<script th:src="@{/js/dataTables.select.min.js}"></script>
+
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script th:src="@{/js/off-canvas.js}"></script>
+<script th:src="@{/js/hoverable-collapse.js}"></script>
+<script th:src="@{/js/template.js}"></script>
+<script th:src="@{/js/settings.js}"></script>
+<script th:src="@{/js/todolist.js}"></script>
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('photoPreview');
+            output.src = reader.result;
+            var pathOutput=document.getElementById('photoPath');
+            pathOutput.textContent=event.target.files[0].name;
+        };
+        if (event.target.files && event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+</script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script th:src="@{/js/dashboard.js}"></script>
+<script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+</body>
+</html>
