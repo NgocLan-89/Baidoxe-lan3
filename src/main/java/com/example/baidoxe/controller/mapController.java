@@ -120,11 +120,13 @@ public String datChoAction(@PathVariable("Id") Integer Id, Model model, HttpSess
             return new ModelAndView("redirect:/login/auth"); // Chuyển hướng nếu session không hợp lệ
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        // Định dạng phù hợp với datetime-local từ HTML
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
         // Chuyển đổi chuỗi thành LocalDateTime
         LocalDateTime gioVao = LocalDateTime.parse(DangKyGioVao, formatter);
         LocalDateTime gioRa = LocalDateTime.parse(DangKyGioRa, formatter);
+
 
         // Tạo đối tượng DatChoDTO
         DatChoDTO datChoDTO = new DatChoDTO();

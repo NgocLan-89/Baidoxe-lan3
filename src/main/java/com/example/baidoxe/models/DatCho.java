@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -24,6 +25,9 @@ public class DatCho {
     private LocalDateTime DangKyGioRa;
     private Integer Status;
     private String MaQR;
+
+    @Column(precision = 9, scale = 3) // DECIMAL(10, 2) trong database
+    private BigDecimal SoTien;
 
     @ManyToOne
     @JoinColumn(name = "VitriDo_Id", referencedColumnName = "Id")
