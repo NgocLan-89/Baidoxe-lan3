@@ -120,7 +120,7 @@ public class ViTriDoServiceImpl implements ViTriDoService {
         if (viTriDoOptional.isPresent()){
             ViTriDo existingViTriDo = viTriDoOptional.get();
             //Cập nhật trạng thái vị trí đỗ làddaxđó Status(2)
-            existingViTriDo.setStatus(2);
+            existingViTriDo.setStatus(3);
             viTriDoRepository.save(existingViTriDo);
         }else {
             throw new IllegalArgumentException("ViTriDo not found with ID: " + Id);

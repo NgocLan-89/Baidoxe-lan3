@@ -117,22 +117,35 @@
                                             <input type="hidden" id="selectedVehicleId" name="selectedVehicleId">
                                             <input type="hidden" id="selectedBienSo" name="bienSo">
                                             <!-- Trường ẩn để lưu giờ vào và giờ ra -->
-                                            <input type="hidden" id="DangKyGioVao" name="DangKyGioVao">
-                                            <input type="hidden" id="DangKyGioRa" name="DangKyGioRa">
 
-                                            <!-- Thời gian chọn -->
-                                            <div class="container mt-2">
+                                            <div class="container mt-2 mb-3">
                                                 <h4 class="text-primary">Chọn thời gian</h4><br>
-                                                <div class="time-selector d-flex justify-content-between align-items-center p-2 border rounded">
-                                                    <button id="decreaseButton" class="btn btn-light btn-sm font-weight-bold">-</button>
-                                                    <div class="text-center">
-                                                        <div id="dateDisplay" class="text-muted small"></div>
-                                                        <br>
-                                                        <div id="timeDisplay" class="time-display"></div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label for="DangKyGioVao">Giờ vào:</label>
+                                                        <input type="datetime-local" id="DangKyGioVao" name="DangKyGioVao" class="form-control" required>
+
                                                     </div>
-                                                    <button id="increaseButton" class="btn btn-light btn-sm font-weight-bold">+</button>
+                                                    <div class="col-6">
+                                                        <label for="DangKyGioRa">Giờ ra:</label>
+                                                        <input type="datetime-local" id="DangKyGioRa" name="DangKyGioRa" class="form-control" required>
+
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </div><br>
+                                            <!-- Thời gian chọn -->
+<!--                                            <div class="container mt-2">-->
+<!--                                                <h4 class="text-primary">Chọn thời gian</h4><br>-->
+<!--                                                <div class="time-selector d-flex justify-content-between align-items-center p-2 border rounded">-->
+<!--                                                    <button id="decreaseButton" class="btn btn-light btn-sm font-weight-bold">-</button>-->
+<!--                                                    <div class="text-center">-->
+<!--                                                        <div id="dateDisplay" class="text-muted small"></div>-->
+<!--                                                        <br>-->
+<!--                                                        <div id="timeDisplay" class="time-display"></div>-->
+<!--                                                    </div>-->
+<!--                                                    <button id="increaseButton" class="btn btn-light btn-sm font-weight-bold">+</button>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
 
                                             <br><br>
                                             <div class="container">
@@ -196,6 +209,11 @@
 <script th:src="@{/js/dashboard.js}"></script>
 <script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
 <script>
+    // Hàm chuyển đổi giờ sang định dạng 24h (HH:mm)
+
+
+
+
     function getDirections(destinationLat, destinationLng) {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -246,62 +264,29 @@
         document.getElementById('selectedBienSo').value = bienSo;
     }
 </script>
-
-
 <script>
-    // Biến lưu thời gian hiện tại
-    let selectedDateTime = new Date();
+    // Hàm kiểm tra giờ vào và giờ ra
+    function validateTime() {
+        const gioVao = document.getElementById("DangKyGioVao").value;
+        const gioRa = document.getElementById("DangKyGioRa").value;
 
-    // Gán sự kiện cho nút tăng và giảm
-    document.getElementById("increaseButton").addEventListener("click", () => {
-        updateDateTime(1); // Tăng 1 giờ
-    });
-
-    document.getElementById("decreaseButton").addEventListener("click", () => {
-        updateDateTime(-1); // Giảm 1 giờ
-    });
-
-    // Hàm cập nhật thời gian và hiển thị
-    function updateDateTime(hoursToAdd) {
-        // Cập nhật thời gian được chọn
-        selectedDateTime.setHours(selectedDateTime.getHours() + hoursToAdd);
-
-        // Cập nhật giao diện hiển thị
-        document.getElementById("dateDisplay").innerText = formatDate(selectedDateTime);
-        document.getElementById("timeDisplay").innerText = formatTime(selectedDateTime);
-
-        // Lưu giờ vào và giờ ra vào các trường ẩn
-        document.getElementById("DangKyGioVao").value = formatFullDateTime(selectedDateTime);
-        const gioRa = new Date(selectedDateTime);
-        gioRa.setHours(gioRa.getHours() + 1); // Giả định giờ ra là 1 giờ sau giờ vào
-        document.getElementById("DangKyGioRa").value = formatFullDateTime(gioRa);
+        if (gioVao && gioRa) {
+            // So sánh giờ vào và giờ ra
+            if (gioRa <= gioVao) {
+                alert("Giờ ra phải lớn hơn giờ vào.");
+                return false;  // Ngừng form gửi đi
+            }
+        }
+        return true;
     }
 
-    // Hàm định dạng ngày: yyyy-MM-dd
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    }
-
-    // Hàm định dạng giờ: HH:mm:ss.SSS
-    function formatTime(date) {
-        const hours = date.getHours().toString().padStart(2, '0');
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const seconds = date.getSeconds().toString().padStart(2, '0');
-        const milliseconds = date.getMilliseconds().toString().padStart(3, '0');
-        return `${hours}:${minutes}:${seconds}.${milliseconds}`;
-    }
-
-    // Hàm định dạng đầy đủ: yyyy-MM-dd HH:mm:ss.SSS
-    function formatFullDateTime(date) {
-        return `${formatDate(date)} ${formatTime(date)}`;
-    }
-
-    // Hiển thị ban đầu
-    updateDateTime(0);
-
+    // Gắn hàm validate vào sự kiện submit của form
+    document.getElementById("timeForm").onsubmit = function(event) {
+        if (!validateTime()) {
+            event.preventDefault();  // Ngừng hành động submit nếu không hợp lệ
+        }
+    };
 </script>
+
 </body>
 </html>
