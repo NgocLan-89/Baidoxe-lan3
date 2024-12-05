@@ -2,14 +2,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="layout :: head">
+<head th:replace="~{layout :: head}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <div class="container-scroller">
     <nav>
-        <header th:replace="layout :: header">
+        <header th:replace="~{layout :: header}">
             <!-- Header content -->
         </header>
     </nav>
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <aside th:replace="layout :: aside">
+        <aside th:replace="~{layout :: aside}">
 
         </aside>
         <div class="main-panel">
@@ -98,7 +98,7 @@
                     </div>
                 </div>
             </div>
-            <footer th:replace="layout :: footer">
+            <footer th:replace="~{layout :: footer}">
             </footer>
         </div>
         <!-- main-panel ends -->

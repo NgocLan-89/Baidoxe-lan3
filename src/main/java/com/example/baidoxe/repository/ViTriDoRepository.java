@@ -2,8 +2,11 @@ package com.example.baidoxe.repository;
 
 import com.example.baidoxe.dto.ViTriDoDTO;
 import com.example.baidoxe.models.ViTriDo;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -33,4 +36,10 @@ public interface ViTriDoRepository extends JpaRepository<ViTriDo, Integer> {
     int countByStatusAndBaiDoId(@Param("baiDoId") Integer baiDoId);
     @Query("SELECT bd FROM ViTriDo bd WHERE bd.Status = 1 AND bd.baiDo.Id = :baiDoId")
     List<ViTriDo> findActiveViTriDoByBaiDoId(@Param("baiDoId") Integer baiDoId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE ViTriDo v SET v.Status = :status WHERE v.baiDo.Id = :baiDoId AND v.ChiTietViTri = :chiTietViTri")
+    void updateStatus(@Param("status") int status, @Param("baiDoId") int baiDoId, @Param("chiTietViTri") int chiTietViTri);
+
 }
