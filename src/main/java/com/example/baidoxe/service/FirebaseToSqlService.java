@@ -1,16 +1,19 @@
 package com.example.baidoxe.service;
 
 import com.example.baidoxe.repository.ViTriDoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.logging.Logger;
 
 @Service
+@Transactional
 public class FirebaseToSqlService {
 
     @Autowired
@@ -51,17 +54,14 @@ public class FirebaseToSqlService {
                             continue;
                         }
 
-                        int currentStatusInSql = viTriDoRepository.getStatus(baiDoId, Integer.parseInt(chiTietViTri));
-                        if (statusFromFirebase == currentStatusInSql) {
-                            logger.info("Giữ nguyên trạng thái cho ViTriDo: " + chiTietViTri + " vì trạng thái trong SQL và Firebase giống nhau (" + currentStatusInSql + ").");
-                            continue;
-                        }
+                        logger.info("Đang xử lý cho ViTriDo: " + chiTietViTri + " với trạng thái từ Firebase: " + statusFromFirebase);
 
+                        int currentStatusInSql = viTriDoRepository.getStatus(baiDoId, Integer.parseInt(chiTietViTri));
+                        logger.info("Trạng thái hiện tại trong SQL: " + currentStatusInSql + " Baido " + baiDoName);
                         if (currentStatusInSql == 3) {
                             if (statusFromFirebase == 1) {
                                 // Lấy thời gian đăng ký ra từ DatCho
                                 LocalDateTime dangKyGioRa = viTriDoRepository.getDangKyGioRa(baiDoId, Integer.parseInt(chiTietViTri));
-
 
                                 if (dangKyGioRa != null && System.currentTimeMillis() > dangKyGioRa.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()) {
                                     logger.info("Cập nhật ViTriDo với chiTietViTri: " + chiTietViTri + " thành status = 1 vì thời gian hiện tại lớn hơn thời gian đăng ký ra.");
@@ -69,17 +69,42 @@ public class FirebaseToSqlService {
                                 } else {
                                     logger.info("Bỏ qua cập nhật cho ViTriDo với chiTietViTri: " + chiTietViTri + " vì Firebase = 1 và thời gian hiện tại chưa đủ.");
                                 }
-
                             } else if (statusFromFirebase == 2) {
                                 logger.info("Cập nhật ViTriDo với chiTietViTri: " + chiTietViTri + " thành status = 2.");
                                 viTriDoRepository.updateStatus(2, baiDoId, Integer.parseInt(chiTietViTri));
+                            }
+                        }
+
+                        // Kiểm tra trạng thái từ Firebase là 2
+                        if (currentStatusInSql == 2) {
+                            LocalDateTime dangKyGioRa = viTriDoRepository.getDangKyGioRa(baiDoId, Integer.parseInt(chiTietViTri));
+                            if (dangKyGioRa != null) {
+                                long currentTimeMillis = System.currentTimeMillis();
+                                long dangKyGioRaMillis = dangKyGioRa.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+                                logger.info("Thời gian hiện tại (millis): " + currentTimeMillis + " Baido " + baiDoName + " Vitri " + chiTietViTri);
+                                logger.info("Thời gian Đăng Ký Giờ Ra (millis): " + dangKyGioRaMillis + " Baido " + baiDoName + " Vitri " + chiTietViTri);
+
+                                if (System.currentTimeMillis() > dangKyGioRaMillis) {
+                                    LocalDateTime updatedDangKyGioRa = dangKyGioRa.plusHours(5);
+                                    logger.info("Cập nhật thời gian Đăng Ký Giờ Ra thêm 5 tiếng: " + updatedDangKyGioRa + " Baido " + baiDoName + " Vitri " + chiTietViTri);
+
+                                    try {
+                                        viTriDoRepository.updateDangKyGioRa(updatedDangKyGioRa, baiDoId, Integer.parseInt(chiTietViTri));
+                                        logger.info("Đã cập nhật thời gian Đăng Ký Giờ Ra trong cơ sở dữ liệu.");
+                                    } catch (Exception e) {
+                                        logger.severe("Lỗi khi cập nhật thời gian Đăng Ký Giờ Ra: " + e.getMessage());
+                                    }
+                                } else {
+                                    logger.info("Thời gian hiện tại chưa lớn hơn thời gian Đăng Ký Giờ Ra. Không cập nhật.");
+                                }
                             } else {
-                                logger.info("Bỏ qua cập nhật cho ViTriDo với chiTietViTri: " + chiTietViTri + " vì không thỏa mãn điều kiện.");
+                                logger.warning("Không tìm thấy thời gian Đăng Ký Giờ Ra cho ViTriDo: " + chiTietViTri);
                             }
                         } else {
-                            logger.info("Cập nhật trạng thái bình thường cho ViTriDo với chiTietViTri: " + chiTietViTri);
-                            viTriDoRepository.updateStatus(statusFromFirebase, baiDoId, Integer.parseInt(chiTietViTri));
+                            logger.info("Không có thay đổi nào cần thực hiện cho trạng thái Firebase: " + statusFromFirebase);
                         }
+
                     }
                 } else {
                     logger.warning("Không có dữ liệu từ Firebase hoặc dữ liệu rỗng cho " + baiDoName);
@@ -90,6 +115,4 @@ public class FirebaseToSqlService {
             }
         }
     }
-
-
 }

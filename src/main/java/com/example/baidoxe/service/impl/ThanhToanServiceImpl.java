@@ -42,4 +42,26 @@ public class ThanhToanServiceImpl implements ThanhToanService {
         Optional<DatCho> thanhToanOptional = thanhToanRepository.findById(Id);
         return thanhToanOptional.map(thanhToanMapper::toDTO).orElse(null);
     }
+
+    // Lấy danh sách các đối tượng ThanhToanDTO từ cơ sở dữ liệu
+    @Override
+    public List<ThanhToanDTO> findThanhToan() {
+        List<ThanhToanDTO> thanhToanDTOList = thanhToanRepository.findThanhToan();
+        // Nếu không có dữ liệu, trả về danh sách trống
+        if (thanhToanDTOList.isEmpty()) {
+            return List.of();
+        }
+
+        return thanhToanDTOList;
+    }
+
+    @Override
+    public List<Object[]> countBookingsByYearAndMonth() {
+        return thanhToanRepository.countBookingsByYearAndMonth();  // Truy vấn native SQL
+    }
+
+    @Override
+    public List<Object[]> countBookingsByMonth() {
+        return thanhToanRepository.countBookingsByMonth();  // Truy vấn native SQL
+    }
 }

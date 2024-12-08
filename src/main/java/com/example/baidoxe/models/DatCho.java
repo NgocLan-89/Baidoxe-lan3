@@ -26,9 +26,6 @@ public class DatCho {
     private Integer Status;
     private String MaQR;
 
-    @Column(precision = 9, scale = 3) // DECIMAL(10, 2) trong database
-    private BigDecimal SoTien;
-
     @ManyToOne
     @JoinColumn(name = "VitriDo_Id", referencedColumnName = "Id")
     private ViTriDo viTriDo;

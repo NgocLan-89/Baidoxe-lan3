@@ -149,7 +149,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar" th:fragment = "aside">
             <ul class="nav">
                 <li class="nav-item">
-                    <a class="nav-link">
+                    <a class="nav-link" th:href="@{/baocao/thongke}">
                         <i class="icon-grid menu-icon"></i>
                         <span class="menu-title">Dashboard</span>
                     </a>
@@ -181,7 +181,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" th:href="@{/datcho/list}" aria-expanded="false" aria-controls="tables">
+                    <a class="nav-link"  th:href="@{/datcho/list}" aria-expanded="false" aria-controls="tables">
                         <i class="icon-clipboard menu-icon"></i>
                         <span class="menu-title">Quản lý đặt chỗ</span>
                     </a>

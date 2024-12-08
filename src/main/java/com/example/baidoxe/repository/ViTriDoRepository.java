@@ -52,6 +52,21 @@ public interface ViTriDoRepository extends JpaRepository<ViTriDo, Integer> {
             "WHERE v.baiDo.Id = :baiDoId AND v.ChiTietViTri = :chiTietViTri")
     LocalDateTime getDangKyGioRa(@Param("baiDoId") int baiDoId, @Param("chiTietViTri") int chiTietViTri);
 
+    @Modifying
+    @Query("UPDATE DatCho d SET d.DangKyGioRa = :updatedTime " +
+            "WHERE d.viTriDo.baiDo.Id = :baiDoId AND d.viTriDo.ChiTietViTri = :viTriId")
+    void updateDangKyGioRa(@Param("updatedTime") LocalDateTime updatedTime,
+                           @Param("baiDoId") int baiDoId,
+                           @Param("viTriId") int viTriId);
+
+    @Modifying
+    @Query("UPDATE ThongTinDo t SET t.ThoiGianRa = :updatedTime WHERE t.datCho.Id = :datChoId")
+    void updateThongTinDoThoiGianRa(@Param("updatedTime") LocalDateTime updatedTime, @Param("datChoId") int datChoId);
+    @Query("SELECT d.Id FROM DatCho d WHERE d.viTriDo.baiDo.Id = :baiDoId AND d.viTriDo.ChiTietViTri = :viTriId")
+    int getDatChoId(@Param("baiDoId") int baiDoId, @Param("viTriId") int viTriId);
+
+
+
 
 
 

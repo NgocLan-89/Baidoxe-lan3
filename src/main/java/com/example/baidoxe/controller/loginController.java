@@ -72,7 +72,7 @@ public class loginController {
             session.setMaxInactiveInterval(30 * 60);
 
             // Chuyển hướng đến trang home
-            return "redirect:/baido/list";
+            return "redirect:/baocao/thongke";
         }
         else {
             // Thêm thông báo lỗi vào model để hiển thị trên trang login

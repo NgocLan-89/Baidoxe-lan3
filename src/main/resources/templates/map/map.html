@@ -154,8 +154,11 @@
                                                 <!-- Liên kết đến chi tiết bãi đỗ -->
                                                 <a th:href="@{|/map/datcho/${baiDo.id}|}">
                                                     <span th:text="${baiDo.tenBaiDo}">Tên bãi đỗ</span>
-                                                    <span th:text="${baiDo.kinhDo}">Kinh độ</span>
-                                                    <span th:text="${baiDo.viDo}">Vĩ độ</span>
+                                                    <br>
+                                                    <!--                                                    <span th:text="${baiDo.kinhDo}">Kinh độ</span>-->
+                                                    <!--                                                    <span th:text="${baiDo.viDo}">Vĩ độ</span>-->
+                                                    <!-- Hiển thị số lượng vị trí còn trống -->
+                                                    <span th:text="${soLuongConTrongMap[baiDo.id]} + ' vị trí còn trống'"></span>
                                                 </a>
                                                 <!-- Thêm thẻ <p> để hiển thị khoảng cách -->
                                                 <p class="distance"></p>
