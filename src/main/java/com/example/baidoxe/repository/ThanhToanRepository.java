@@ -23,4 +23,25 @@ public interface ThanhToanRepository extends JpaRepository<DatCho, Integer> {
             "JOIN u.nganHang n " +
             "WHERE d.Status = 1")
     List<ThanhToanDTO> findThanhToan();
+
+    @Query(value = "SELECT MONTH(d.DangKyGioVao) AS month, COUNT(*) AS count " +
+            "FROM DatCho d " +
+            "WHERE d.DangKyGioVao IS NOT NULL " +
+            "GROUP BY MONTH(d.DangKyGioVao) " +
+            "ORDER BY month",
+            nativeQuery = true)
+    List<Object[]> countBookingsByMonth();
+
+    @Query(value = "SELECT YEAR(d.DangKyGioVao) AS Nam, " +
+            "MONTH(d.DangKyGioVao) AS Thang, " +
+            "COUNT(*) AS SoLuongDatCho " +
+            "FROM DatCho d " +
+            "WHERE d.DangKyGioVao IS NOT NULL " +
+            "GROUP BY YEAR(d.DangKyGioVao), MONTH(d.DangKyGioVao) " +
+            "ORDER BY Nam, Thang",
+            nativeQuery = true)
+    List<Object[]> countBookingsByYearAndMonth();
+
+
+
 }

@@ -148,14 +148,14 @@
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar" th:fragment = "aside">
             <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link">
+                <li class="nav-item" >
+                    <a class="nav-link" th:href="@{/baocao/thongke}">
                         <i class="icon-grid menu-icon"></i>
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title" >Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                    <a class="nav-link" data-toggle="collapse" href="#ui-basic">
                         <i class="icon-head menu-icon"></i>
                         <span class="menu-title">Quản lý người dùng</span>
                         <i class="menu-arrow"></i>
@@ -175,19 +175,19 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" th:href="@{/vitrido/list}" aria-expanded="false" aria-controls="charts">
+                    <a class="nav-link" th:href="@{/vitrido/list}">
                         <i class="icon-location menu-icon"></i>
                         <span class="menu-title">Quản lý vị trí đỗ</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" th:href="@{/datcho/list}" aria-expanded="false" aria-controls="tables">
+                    <a class="nav-link" th:href="@{/datcho/list}">
                         <i class="icon-clipboard menu-icon"></i>
                         <span class="menu-title">Quản lý đặt chỗ</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" th:href="@{/quyen/list}" aria-expanded="false" aria-controls="charts">
+                    <a class="nav-link" data-toggle="collapse" th:href="@{/quyen/list}">
                         <i class="icon-layers menu-icon"></i>
                         <span class="menu-title">Quản lý quyền</span>
                     </a>
@@ -247,4 +247,3 @@
 </body>
 
 </html>
-

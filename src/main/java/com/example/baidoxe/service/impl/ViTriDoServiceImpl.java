@@ -7,6 +7,9 @@ import com.example.baidoxe.models.ViTriDo;
 import com.example.baidoxe.repository.BaiDoRepository;
 import com.example.baidoxe.repository.ViTriDoRepository;
 import com.example.baidoxe.service.ViTriDoService;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,8 @@ public class ViTriDoServiceImpl implements ViTriDoService {
                 .collect(Collectors.toList());
 
     }
+    private static final Logger logger = LoggerFactory.getLogger(ViTriDoServiceImpl.class);
+
 
     @Override
     public int countByStatus() {
@@ -115,7 +120,7 @@ public class ViTriDoServiceImpl implements ViTriDoService {
         if (viTriDoOptional.isPresent()){
             ViTriDo existingViTriDo = viTriDoOptional.get();
             //Cập nhật trạng thái vị trí đỗ làddaxđó Status(2)
-            existingViTriDo.setStatus(2);
+            existingViTriDo.setStatus(3);
             viTriDoRepository.save(existingViTriDo);
         }else {
             throw new IllegalArgumentException("ViTriDo not found with ID: " + Id);

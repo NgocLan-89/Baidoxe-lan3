@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout :: head}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container-scroller">
+    <nav>
+        <header th:replace="layout :: header">
+            <!-- Header content -->
+        </header>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_settings-panel.html -->
+        <div class="theme-setting-wrapper">
+            <div id="settings-trigger"><i class="ti-settings"></i></div>
+            <div id="theme-settings" class="settings-panel">
+                <i class="settings-close ti-close"></i>
+                <p class="settings-heading">SIDEBAR SKINS</p>
+                <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                    <div class="img-ss rounded-circle bg-light border mr-3"></div>
+                    Light
+                </div>
+                <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                    <div class="img-ss rounded-circle bg-dark border mr-3"></div>
+                    Dark
+                </div>
+                <p class="settings-heading mt-2">HEADER SKINS</p>
+                <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
+                </div>
+            </div>
+        </div>
+        <aside th:replace="~{layout :: aside}">
+
+        </aside>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Báo cáo thống kê</h4>
+                                <div class="row">
+                                    <div class="col-lg-6 grid-margin stretch-card">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <!-- Biểu đồ dạng đường (Line chart) -->
+                                                <h5>Biểu đồ đường cong</h4>
+                                                    <canvas id="bookingChart" width="400" height="200"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 grid-margin stretch-card">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <!-- Biểu đồ dạng đường (Line chart) -->
+                                                <h5 >Biểu đồ tròn</h5>
+                                                <!-- Biểu đồ dạng hình tròn (Pie chart) -->
+                                                <canvas id="pieChart" width="400" height="200"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <h4 class="card-title text-lg-center">Bảng báo cáo đặt chỗ</h4>
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Năm</th>
+                                                <th>Tháng</th>
+                                                <th>Số lượng đặt chỗ</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="row : ${bookingsData}">
+                                                <td th:text="${row[0]}"></td>
+                                                <td th:text="${row[1]}"></td>
+                                                <td th:text="${row[2]}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer th:replace="~{layout :: footer}">
+                </footer>
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+
+    <script th:src="@{/vendors/js/vendor.bundle.base.js}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script th:src="@{/vendors/chart.js/Chart.min.js}"></script>
+    <script th:src="@{/vendors/datatables.net/jquery.dataTables.js}"></script>
+    <script th:src="@{/vendors/datatables.net-bs4/dataTables.bootstrap4.js}"></script>
+    <script th:src="@{/js/dataTables.select.min.js}"></script>
+
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script th:src="@{/js/off-canvas.js}"></script>
+    <script th:src="@{/js/hoverable-collapse.js}"></script>
+    <script th:src="@{/js/template.js}"></script>
+    <script th:src="@{/js/settings.js}"></script>
+    <script th:src="@{/js/todolist.js}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script th:src="@{/js/dashboard.js}"></script>
+    <script th:src="@{/js/Chart.roundedBarCharts.js}"></script>
+
+    <script th:inline="javascript">
+        /* Khai báo dữ liệu biểu đồ từ server */
+        var bookingsData = [[${bookingsData}]];
+
+        var labels = [];
+        var data = [];
+
+        // Lặp qua dữ liệu để lấy thông tin cho labels và datasets
+        bookingsData.forEach(function(item) {
+            labels.push(item[0] + "-" + item[1]);  // Năm-Tháng
+            data.push(item[2]);  // Số lượng booking
+        });
+
+        // Biểu đồ đường (Line chart)
+        var ctxLine = document.getElementById('bookingChart').getContext('2d');
+        var bookingChart = new Chart(ctxLine, {
+            type: 'line',  // Loại biểu đồ
+            data: {
+                labels: labels,  // Nhãn cho trục X (Năm-Tháng)
+                datasets: [{
+                    label: 'Số lượng booking',
+                    data: data,  // Dữ liệu cho trục Y
+                    borderColor: 'rgb(75, 192, 192)',
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Thời gian'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Số lượng'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Biểu đồ hình tròn (Pie chart)
+        var ctxPie = document.getElementById('pieChart').getContext('2d');
+        var pieChart = new Chart(ctxPie, {
+            type: 'pie',  // Loại biểu đồ (Hình tròn)
+            data: {
+                labels: labels,  // Nhãn cho các phần trong biểu đồ hình tròn (Năm-Tháng)
+                datasets: [{
+                    label: 'Số lượng booking',
+                    data: data,  // Dữ liệu cho các phần trong biểu đồ
+                    backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)'],  // Màu nền cho từng phần
+                    hoverOffset: 4  // Khi hover, các phần sẽ có độ rộng khác biệt
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + ' bookings';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

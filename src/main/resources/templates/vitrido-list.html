@@ -2,14 +2,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="layout :: head">
+<head th:replace="~{layout :: head}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <div class="container-scroller">
     <nav>
-        <header th:replace="layout :: header">
+        <header th:replace="~{layout :: header}">
             <!-- Header content -->
         </header>
     </nav>
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <aside th:replace="layout :: aside">
+        <aside th:replace="~{layout :: aside}">
 
         </aside>
         <div class="main-panel">
@@ -78,7 +78,8 @@
                                             <td th:text="${vitrido.id}">ID</td>
                                             <td th:text="${vitrido.tenBaiDo}">TenBaiDo</td>
                                             <td th:text="${vitrido.chiTietViTri}">Chi tiết vị trí</td>
-                                            <td th:text="${vitrido.status == 1 ? 'Trống' : (vitrido.status == 2 ? 'Đầy' : 'Không xác định')}"></td>
+                                            <td th:text="${vitrido.status == 1 ? 'Trống' : (vitrido.status == 2 ? 'Đầy' : (vitrido.status == 3 ? 'Đã đặt chỗ' : 'Không xác định'))}"></td>
+<!--                                            <td th:text="${vitrido.status}">Status</td>-->
                                             <td>
                                                 <div class="form-button-action">
                                                     <a th:href="@{/vitrido/sua/{id}(id=${vitrido.id})}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i> Sửa</a>
@@ -98,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <footer th:replace="layout :: footer">
+            <footer th:replace="~{layout :: footer}">
             </footer>
         </div>
         <!-- main-panel ends -->

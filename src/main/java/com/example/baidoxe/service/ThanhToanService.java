@@ -9,4 +9,9 @@ import java.util.List;
 public interface ThanhToanService {
     List<ThanhToanDTO> getThanhToanbyPTID();
     ThanhToanDTO finThanhToanById(Integer Id);
+    List<ThanhToanDTO> findThanhToan();
+
+    List<Object[]> countBookingsByYearAndMonth();
+
+    List<Object[]> countBookingsByMonth();
 }
