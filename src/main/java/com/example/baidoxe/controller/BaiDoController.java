@@ -3,6 +3,7 @@ package com.example.baidoxe.controller;
 import com.example.baidoxe.dto.BaiDoDTO;
 import com.example.baidoxe.repository.BaiDoRepository;
 import com.example.baidoxe.service.BaiDoService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,8 @@ public class BaiDoController {
         }
     }
     @GetMapping("/list")
-    public String listBaiDo(Model model) {
+    public String listBaiDo(HttpServletRequest request, Model model) {
+        model.addAttribute("currentUrl", request.getRequestURI());
         List<BaiDoDTO> BaiDoListDTO = baiDoService.findActiveBaiDo();
         model.addAttribute("listBaiDo", BaiDoListDTO);
         return "baido-list";

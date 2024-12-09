@@ -6,6 +6,7 @@ import com.example.baidoxe.dto.PhuongTienDTO;
 import com.example.baidoxe.dto.RoleDTO;
 import com.example.baidoxe.dto.UsersDTO;
 import com.example.baidoxe.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,8 +33,9 @@ public class UserController {
     @Autowired
     private LuuAnh luuAnh;
     @GetMapping("/list")
-    public String listUsersPage(Model model) {
+    public String listUsersPage(HttpServletRequest request, Model model) {
         List<UsersDTO> listUser = userService.listActiveUser("1"); // Lấy danh sách user với status = 1 (Active)
+        model.addAttribute("currentUrl", request.getRequestURI());
         model.addAttribute("listUser", listUser);
         return "user-list"; // Tên file HTML (không cần phần mở rộng .html)
     }
