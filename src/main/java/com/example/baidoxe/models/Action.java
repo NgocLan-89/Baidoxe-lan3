@@ -1,10 +1,7 @@
 package com.example.baidoxe.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -18,6 +15,7 @@ import java.util.Set;
 public class Action {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Exclude
     private Integer Id;
     private String ActionName;
     private String Controller;
@@ -26,7 +24,7 @@ public class Action {
     private LocalDate UpdateAt;
     private String Icon;
     private Integer Status;
-
+    @ToString.Exclude
     @OneToMany(mappedBy = "actions",  cascade = CascadeType.ALL)
     private Set<Role_Action> role_actions;
 }

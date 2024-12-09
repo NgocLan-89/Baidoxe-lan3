@@ -1,10 +1,7 @@
 package com.example.baidoxe.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,20 +17,22 @@ import java.util.Set;
 public class DatCho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer Id;
     private LocalDateTime DangKyGioVao;
     private LocalDateTime DangKyGioRa;
     private Integer Status;
     private String MaQR;
-
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "VitriDo_Id", referencedColumnName = "Id")
     private ViTriDo viTriDo;
-
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "PhuongTien_Id", referencedColumnName = "Id")
     private PhuongTien phuongTien;
-
+    @ToString.Exclude
     @OneToMany(mappedBy = "datCho", cascade = CascadeType.ALL)
     private Set<ThongTinDo> thongTinDos;
+
 }

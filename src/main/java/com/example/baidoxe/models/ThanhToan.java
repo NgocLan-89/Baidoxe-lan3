@@ -1,8 +1,11 @@
 package com.example.baidoxe.models;
 
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 public class ThanhToan {
+    @ToString.Exclude
     private Long id;
     private LocalDateTime thoiGianVao;
 

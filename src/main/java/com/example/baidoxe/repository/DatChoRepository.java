@@ -56,4 +56,8 @@ public interface DatChoRepository extends JpaRepository<DatCho, Integer> {
             "WHERE v.baiDo.Id = :baiDoId AND v.ChiTietViTri = :chiTietViTri")
     Integer findDatChoId(@Param("baiDoId") Integer baiDoId,
                          @Param("chiTietViTri") Integer chiTietViTri);
+
+    @Query("SELECT d FROM DatCho d JOIN d.viTriDo v WHERE d.DangKyGioRa < :currentTime AND v.Status = 2")
+    List<DatCho> findExpiredReservations(@Param("currentTime") LocalDateTime currentTime);
+
 }

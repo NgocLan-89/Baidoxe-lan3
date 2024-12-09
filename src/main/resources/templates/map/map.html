@@ -127,8 +127,7 @@
                                         <input type="text" class="form-control" id="latitude" placeholder="Nhập vĩ độ">
                                     </div>
                                     <div style="float: right" class="col-lg-6 col-sm-6">
-                                        <button class="btn btn-outline-primary btn-fw" onclick="searchLocation()">Tìm kiếm</button>
-
+                                        <button class="btn btn-outline-primary btn-fw" onclick="searchAndCalculate()">Tìm kiếm</button>
                                     </div>
                                 </div>
                                 <div class="row mb-3 align-items-center">
@@ -139,8 +138,7 @@
                                         <input class="form-control" type="text" id="longitude" placeholder="Nhập kinh độ">
                                     </div>
                                     <div style="float: right" class="col-lg-6 col-sm-6">
-                                        <button class="btn btn-outline-primary btn-fw" onclick="calculateDistances()">Tính khoảng cách</button>
-                                        <button class="btn btn-outline-primary btn-fw ml-2" id="showPopupBtn">Hiển thị danh sách bãi đỗ</button>
+                                        <button class="btn btn-outline-primary btn-fw" id="showPopupBtn">Hiển thị danh sách bãi đỗ</button>
                                     </div>
                                 </div>
                                 <!-- Popup -->
@@ -197,6 +195,13 @@
 
 <script src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyDwGpvSIZRFawVl5MrDzywO6JVRDbVeSgM&callback=initMap" async defer></script>
 <script>
+    function searchAndCalculate() {
+        // Gọi hàm tìm kiếm
+        searchLocation();
+
+        // Gọi hàm tính khoảng cách
+        calculateDistances();
+    }
     const scrollContainer = document.getElementById("scrollContainer");
 
     if (scrollContainer) {

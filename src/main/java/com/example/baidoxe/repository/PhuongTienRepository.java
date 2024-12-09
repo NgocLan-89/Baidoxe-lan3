@@ -24,4 +24,6 @@ public interface PhuongTienRepository extends JpaRepository<PhuongTien, Integer>
             "JOIN Users u ON u.Id = pt.users.Id " + // thêm khoảng trắng sau User_Id
             "WHERE pt.Status = 1 AND pt.users.Id = :userId")
     List<PhuongTienDTO> findPhuongTienUser(@Param("userId") Integer userId);
+
+    Optional<PhuongTien> findById(Integer id);
 }

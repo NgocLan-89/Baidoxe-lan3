@@ -16,6 +16,7 @@ public class Users {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Exclude
     private Integer Id;
     private String HoTen;
     private Integer SDT;
@@ -25,14 +26,17 @@ public class Users {
     private Integer Status;
     private String Image;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "Role_Id", referencedColumnName = "Id")
     private Role role;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "NganHangId", referencedColumnName = "Id")
     private NganHang nganHang;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PhuongTien> phuongTiens;
 

@@ -59,17 +59,7 @@ public interface ViTriDoRepository extends JpaRepository<ViTriDo, Integer> {
                            @Param("baiDoId") int baiDoId,
                            @Param("viTriId") int viTriId);
 
-    @Modifying
-    @Query("UPDATE ThongTinDo t SET t.ThoiGianRa = :updatedTime WHERE t.datCho.Id = :datChoId")
-    void updateThongTinDoThoiGianRa(@Param("updatedTime") LocalDateTime updatedTime, @Param("datChoId") int datChoId);
-    @Query("SELECT d.Id FROM DatCho d WHERE d.viTriDo.baiDo.Id = :baiDoId AND d.viTriDo.ChiTietViTri = :viTriId")
-    int getDatChoId(@Param("baiDoId") int baiDoId, @Param("viTriId") int viTriId);
-
-
-
-
-
-
-
+    @Query("SELECT d.phuongTien.Id FROM ViTriDo v INNER JOIN DatCho d ON d.viTriDo.Id = v.Id WHERE v.baiDo.Id= :baiDoId AND v.Id = :viTriDoId")
+    Integer getPhuongTienIdByViTri(@Param("baiDoId") Integer baiDoId, @Param("viTriDoId") Integer viTriDoId);
 
 }

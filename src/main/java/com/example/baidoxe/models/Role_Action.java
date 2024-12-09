@@ -1,10 +1,7 @@
 package com.example.baidoxe.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Role_Action {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Exclude
     private Integer Id;
 
     @ManyToOne

@@ -1,10 +1,7 @@
 package com.example.baidoxe.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
@@ -17,12 +14,15 @@ import java.util.Set;
 public class ViTriDo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Exclude
     private Integer Id;
     private Integer Status;
     private Integer ChiTietViTri;
+    @ToString.Exclude
     @OneToMany(mappedBy = "viTriDo",  cascade = CascadeType.ALL)
     private Set<DatCho> datChos;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "BaiDo_Id", referencedColumnName = "Id")
     private BaiDo baiDo;

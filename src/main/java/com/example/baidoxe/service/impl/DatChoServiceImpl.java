@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,7 +50,7 @@ public class DatChoServiceImpl implements DatChoService {
         DatCho datCho = datChoMapper.addDatCho(datChoDTO, phuongTien, viTriDo);
 
         // Lưu đối tượng DatCho mới vào cơ sở dữ liệu
-        DatCho savedDatCho = datChoRepository.save(datCho);
+        DatCho savedDatCho = (DatCho) datChoRepository.save(datCho);
 
         // Chuyển đổi đối tượng DatCho đã lưu thành DatChoDTO để trả về
         return datChoMapper.toDatChoDTO(savedDatCho);
@@ -61,4 +63,61 @@ public class DatChoServiceImpl implements DatChoService {
                 .map(datChoMapper::toDatChoDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void createNewReservation(DatChoDTO datChoDTO) {
+        try {
+            // Chuyển đổi từ DatChoDTO sang DatCho
+            PhuongTien phuongTien = new PhuongTien();
+            phuongTien.setId(datChoDTO.getPhuongTien_Id());
+
+            ViTriDo viTriDo = new ViTriDo();
+            viTriDo.setId(datChoDTO.getViTriDo_Id());
+
+            DatCho datCho = datChoMapper.addDatCho(datChoDTO, phuongTien, viTriDo);
+
+            // Lưu vào cơ sở dữ liệu
+            datChoRepository.save(datCho);
+
+            System.out.println("Đặt chỗ mới đã được thêm thành công: " + datCho);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Lỗi khi thêm đặt chỗ mới: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void extendExpiredReservations() {
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        // Lấy danh sách đặt chỗ đã hết hạn và có vị trí đỗ Status = 2
+        List<DatCho> expiredReservations = datChoRepository.findExpiredReservations(currentTime);
+
+        for (DatCho oldReservation : expiredReservations) {
+            // Lấy biển số xe từ PhuongTien_Id
+            PhuongTien phuongTien = phuongTienRepository.findById(oldReservation.getPhuongTien().getId()).orElse(null);
+            String bienSoXe = (phuongTien != null) ? phuongTien.getBienSo() : "Unknown";
+
+            // Tạo đặt chỗ mới
+            DatCho newReservation = new DatCho();
+            newReservation.setDangKyGioVao(oldReservation.getDangKyGioRa());
+            newReservation.setDangKyGioRa(oldReservation.getDangKyGioRa().plusHours(5));
+            newReservation.setViTriDo(oldReservation.getViTriDo());
+            newReservation.setPhuongTien(oldReservation.getPhuongTien());
+
+            // Tạo mã QR với thông tin Thời gian vào, Thời gian ra và Biển số xe
+            String maQR = "QR_" + oldReservation.getDangKyGioVao().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm")) +
+                    "_5h_"+ bienSoXe;
+            newReservation.setMaQR(maQR);
+
+            newReservation.setStatus(1); // Trạng thái mặc định là đang sử dụng
+
+            // Lưu đặt chỗ mới vào database
+            datChoRepository.save(newReservation);
+
+            System.out.println("Đã tạo đặt chỗ mới từ đặt chỗ hết hạn: " + newReservation);
+        }
+    }
+
+
 }
